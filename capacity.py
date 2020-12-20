@@ -50,13 +50,13 @@ def updateData(timeTag: str, capacity: int):
                     + str(count) + ' ' \
                     + str(totalCapacity) + ' ' \
                     + str(averageCapacity) + ' ' \
-                    + str(capacity)
+                    + str(capacity) + '\n'
             updated = True
     if not updated:
         data.append(timeTag + ' 1 ' \
                 + str(capacity) + ' ' \
                 + str(capacity) + ' ' \
-                + str(capacity))
+                + str(capacity) + '\n')
     with open(datafilePath, 'w') as file:
         file.writelines(data)
 
