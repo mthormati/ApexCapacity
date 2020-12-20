@@ -1,1 +1,1 @@
-URL = "https://www.apexclimbinggym.com/index.html"
+endpoint = 'https://api.capacity.fyi/store/apex-climbing-gym/counters'
