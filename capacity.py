@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 from properties import *
 
 def main():
+    print('starting')
     capacity = getCapacity()
     if (capacity >= 0):
         dayTimeTag = getDayTimeTag()
@@ -59,10 +60,10 @@ def updateData(timeTag: str, capacity: int):
                 + str(capacity) + '\n')
     with open(datafilePath, 'w') as file:
         file.writelines(data)
+    print('done')
 
 if __name__ == '__main__':
-    schedule.every().hour.at(':31').do(main)
-    schedule.every().hour.at(':01').do(main)
+    schedule.every(10).minutes.do(main)
     while True:
         schedule.run_pending()
-        time.sleep(60)
+        time.sleep(1)
