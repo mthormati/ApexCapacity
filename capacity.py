@@ -1,17 +1,24 @@
-import os.path
+import logging
+import logging.handlers
+import os
 import requests
 import schedule
 import time
 
 from datetime import datetime, timedelta
+from logging.handlers import RotatingFileHandler
 from properties import *
 
+logger = logging.getLogger('capacity app logger')
+
 def main():
-    print('starting')
+    logger.info(str(datetime.now()) + ' Starting ')
     capacity = getCapacity()
+    logger.info('Capacity: ' + str(capacity))
     if (capacity >= 0):
         dayTimeTag = getDayTimeTag()
         updateData(dayTimeTag, capacity)
+    logger.info(str(datetime.now()) + ' Finished')
 
 def getCapacity():
     try:
@@ -22,7 +29,7 @@ def getCapacity():
                 if (counter['counter_slug'] == 'climbing-area'):
                     return counter['current_count']
     except Exception as e:
-        print(e)
+        logger.error('Exception: ' + str(e))
     return -1
 
 def getDayTimeTag():
@@ -37,6 +44,7 @@ def getDayTimeTag():
 # <day of week> <time> <number of data points> <total capacity> <running average> <latest capacity>
 # Example: 1 00:30 5 6
 def updateData(timeTag: str, capacity: int):
+    logger.info('Timetag: ' + timeTag)
     data = []
     if os.path.isfile(datafilePath):
         with open(datafilePath, 'r') as file:
@@ -60,10 +68,20 @@ def updateData(timeTag: str, capacity: int):
                 + str(capacity) + '\n')
     with open(datafilePath, 'w') as file:
         file.writelines(data)
-    print('done')
+
+def setupLogging():
+    if not os.path.isdir(logFileDir):
+        os.makedirs(logFileDir)
+    logger.setLevel(logging.INFO)
+    handler = RotatingFileHandler(filename=logFilePath, maxBytes=logFileMaxBytes, backupCount=10)
+    logger.addHandler(handler)
 
 if __name__ == '__main__':
+    setupLogging()
     schedule.every(10).minutes.do(main)
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
+    try:
+        while True:
+            schedule.run_pending()
+            time.sleep(1)
+    except Exception as e:
+        logger.error('Exception: ' + str(e))
