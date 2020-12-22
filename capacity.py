@@ -79,9 +79,9 @@ def setupLogging():
 if __name__ == '__main__':
     setupLogging()
     schedule.every(10).minutes.do(main)
-    try:
-        while True:
+    while True:
+        try:
             schedule.run_pending()
             time.sleep(1)
-    except Exception as e:
-        logger.error('Exception: ' + str(e))
+        except Exception as e:
+            logger.error('Exception: ' + str(e))
