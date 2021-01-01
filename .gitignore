@@ -2,3 +2,5 @@ capacity_data.txt
 properties.py
 *.log
 node_modules
+display_apex_capacity.sh
+.DS_Store
