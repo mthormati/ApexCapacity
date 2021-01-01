@@ -21,8 +21,6 @@ fetch('http://localhost:8080/')
             return 0
         })
     }
-    console.log(dataByDay)
-
 
     const allCtx = document.querySelectorAll('canvas')
     for (var i = 0; i < allCtx.length; i++) {
